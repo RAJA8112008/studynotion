@@ -1,5 +1,6 @@
 const BASE_URL = import.meta.env.VITE_APP_BASE_URL
-
+console.log("ENV:", import.meta.env);
+console.log("BASE_URL:", import.meta.env.VITE_APP_BASE_URL);
 // Auth Endpoints 
 export const endpoints = {
     SENDOTP_API: BASE_URL + "/auth/send-otp",
