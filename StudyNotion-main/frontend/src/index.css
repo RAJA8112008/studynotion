@@ -1,0 +1,4 @@
+/* All global styles and Tailwind config are handled in App.css */
+*, *::before, *::after {
+  box-sizing: border-box;
+}

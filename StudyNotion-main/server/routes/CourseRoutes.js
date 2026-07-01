@@ -1,0 +1,37 @@
+import express from "express";
+import { createCourse, editCourse, getAllCourse, getCourseDetails, getFullCourseDetails, getInstructorCourses, deleteCourse } from "../controllers/CourseController.js";
+import { createCategory, showAllCategory, categoryPageDetails } from "../controllers/CategoryController.js"
+import { createSection, updateSection, deleteSection } from "../controllers/SectionController.js"
+import { createSubSection, updateSubSection, deleteSubSection } from "../controllers/SubSectionController.js"
+import { createRating, getAverageRating, getAllRating } from '../controllers/RatingAndReveiw.js'
+import { updateCourseProgress } from "../controllers/CourseProgressController.js"
+import { auth, isInstructor, isAdmin, isStudent } from "../middlewares/authMiddleware.js"
+
+const router = express.Router();
+
+router.post("/createCategory", auth, isAdmin, createCategory);
+router.route("/showAllCategories").get(showAllCategory).post(showAllCategory);
+router.post("/getCategoryPageDetails", categoryPageDetails);
+
+router.post("/createCourse", auth, isInstructor, createCourse);
+router.post("/editCourse", auth, isInstructor, editCourse);
+router.get("/getAllCourses", getAllCourse);
+router.post("/getCourseDetails", getCourseDetails)
+router.post("/getFullCourseDetails", auth, getFullCourseDetails);
+router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
+router.delete("/deleteCourse", deleteCourse);
+router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses);
+
+router.post("/addSection", auth, isInstructor, createSection);
+router.post("/updateSection", auth, isInstructor, updateSection);
+router.post("/deleteSection", auth, isInstructor, deleteSection);
+
+router.post("/updateSubSection", auth, isInstructor, updateSubSection)
+router.post("/deleteSubSection", auth, isInstructor, deleteSubSection);
+router.post("/addSubSection", auth, isInstructor, createSubSection)
+
+router.post("/createRating", auth, isStudent, createRating);
+router.get("/getAverageRating", getAverageRating);
+router.get("/getReviews", getAllRating);
+
+export default router;

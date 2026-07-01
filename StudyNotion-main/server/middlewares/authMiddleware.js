@@ -1,0 +1,110 @@
+import jwt from "jsonwebtoken"
+import  dotenv from "dotenv"
+import User from "../models/UserModel.js"
+
+dotenv.config()
+
+
+// auth 
+export const auth = async(req,res,next) => {
+    try {
+        // extract token
+        const token = req.header("Authorization")?.replace("Bearer ", "") || req.cookies.token || req.body.token;
+        // if token is missing then return response
+        if(!token){
+            return res.status(401).json({
+                success:false,
+                message:"Token is missing",
+            });
+        }
+
+        // verify token 
+        try {
+            const decode =  jwt.verify(token,process.env.JWT_SECRET);
+            console.log(decode);
+            req.user = decode;
+        } catch (error) {
+            // verification - issue 
+            console.error("JWT Verification Error:", error.message);
+            return res.status(401).json({
+                 success:false,
+            message:"Token is invalid: " + error.message,
+            })
+           
+        }
+        next();
+
+    } catch (error) {
+        console.error("Outer Auth Catch Error:", error.message);
+        return res.status(401).json({
+            success:false,
+            message:'Something went wrong while validateing the token'
+        });
+    }
+}
+
+// isStudent 
+export const isStudent = async (req,res,next) => {
+    try {
+        const userDetails = await User.findOne({
+            email:req.user.email
+        })
+
+        if(userDetails.accountType !== "Student"){
+            return res.status(401).json({
+                success:false,
+                message:"This is a protecte route for student Only "
+            })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"Something went wrong try again"
+        })
+    }
+}
+
+// isInstructor 
+export const isInstructor = async (req,res,next) => {
+    try {
+        const userDetails = await User.findOne({ email: req.user.email });
+		console.log(userDetails);
+
+		console.log(userDetails.accountType);
+
+        if(userDetails.accountType !== "Instructor"){
+            return res.status(401).json({
+                success:false,
+                message:"This is a protected route for Instructor Only "
+            })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"Something went wrong try again"
+        })
+    }
+}
+
+// isAdmin 
+
+export const isAdmin = async (req,res,next) => {
+    try {
+        const userDetails = await User.findOne({ email: req.user.email });
+        if(userDetails.accountType !== "Admin"){
+            return res.status(401).json({
+                success:false,
+                message:"This is a protecte route for Admin Only "
+            })
+        }
+        next();
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"Something went wrong try again not admin"
+        })
+    }
+}
+

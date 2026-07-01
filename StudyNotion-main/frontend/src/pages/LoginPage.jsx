@@ -1,0 +1,21 @@
+import React from 'react'
+import loginImg from "../Asset/Image/login.webp"
+import Template from '../component/core/Auth/Template'
+import Footer from '../component/common/Footer'
+
+function LoginPage() {
+  return (
+    <>
+      <Template
+        title="Welcome Back"
+        description1="Build skills for today, tomorrow, and beyond."
+        description2="Education to future-proof your career."
+        image={loginImg}
+        formType="login"
+      />
+      <Footer />
+    </>
+  )
+}
+
+export default LoginPage
