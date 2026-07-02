@@ -28,7 +28,34 @@ app.use(fileUpload({
 app.use(express.json());
 app.use(cookieParser());
 
+//<-------------------email test------------------------>
 
+import mailSender from "./utils/mailSender.js";
+
+app.get("/test-mail", async (req, res) => {
+  try {
+    const info = await mailSender(
+      "kraj9380286@gmail.com",
+      "StudyNotion Test",
+      "<h2>If you received this email, SMTP is working.</h2>"
+    );
+
+    res.json({
+      success: true,
+      message: "Email sent",
+      info,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      error,
+    });
+  }
+});
+//<------------------------------------->
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
