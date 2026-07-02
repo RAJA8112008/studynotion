@@ -4,7 +4,7 @@ const mailSender = async (email, title, body) => {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.MAIL_HOST,
-      port: 587,
+      port: Number(process.env.MAIL_PORT),
       secure: false,
       auth: {
         user: process.env.MAIL_USER,
@@ -19,10 +19,10 @@ const mailSender = async (email, title, body) => {
       html: body,
     });
 
-    console.log("Email Sent:", info.messageId);
+    console.log("Email sent:", info.messageId);
     return info;
   } catch (error) {
-    console.error("Mail Error:", error);
+    console.error(error);
     throw error;
   }
 };
