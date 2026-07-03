@@ -15,7 +15,6 @@ const  courseEnrollmentEmail = (courseName, name) => {
                 padding: 0;
             }
     
-    
             .container {
                 max-width: 600px;
                 margin: 0 auto;
