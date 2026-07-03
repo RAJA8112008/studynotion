@@ -10,7 +10,14 @@ const mailSender = async (email, title, body) => {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
       },
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
     });
+
+    console.log("Verifying SMTP...");
+    await transporter.verify();
+    console.log("SMTP Connected Successfully");
 
     const info = await transporter.sendMail({
       from: `"StudyNotion" <${process.env.MAIL_FROM}>`,
@@ -19,9 +26,10 @@ const mailSender = async (email, title, body) => {
       html: body,
     });
 
+    console.log("Email sent:", info.messageId);
     return info;
   } catch (error) {
-    console.error(error);
+    console.error("Mail Error:", error);
     throw error;
   }
 };
